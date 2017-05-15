@@ -89,7 +89,7 @@ import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 import org.apache.ibatis.type.UnknownTypeHandler;
 
-import cn.howso.framework.mybatis.sqlprovider.ProviderHelper;
+import cn.howso.framework.mybatis.provider.ProviderHelper;
 
 /**
  * 这个类的包路径不可以修改，因为是用于覆盖mybatis的类。

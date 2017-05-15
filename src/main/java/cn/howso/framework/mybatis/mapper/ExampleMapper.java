@@ -11,8 +11,8 @@ import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
 import cn.howso.framework.mybatis.pagination.IndexPage;
-import cn.howso.framework.mybatis.sqlprovider.ProviderHelper;
-import cn.howso.framework.mybatis.sqlprovider.ScriptSqlProviderImpl;
+import cn.howso.framework.mybatis.provider.ProviderHelper;
+import cn.howso.framework.mybatis.provider.ScriptSqlProviderImpl;
 /**
  * 如果定义的表没有主键，则不需要关于主键的方法，那么继承这个接口更合适
  * */

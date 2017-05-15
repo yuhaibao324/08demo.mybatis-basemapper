@@ -1,4 +1,4 @@
-package cn.howso.framework.mybatis.sqlprovider;
+package cn.howso.framework.mybatis.provider;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;

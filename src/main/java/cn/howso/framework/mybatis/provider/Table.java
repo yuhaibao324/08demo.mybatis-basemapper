@@ -1,4 +1,4 @@
-package cn.howso.framework.mybatis.sqlprovider;
+package cn.howso.framework.mybatis.provider;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value={ElementType.TYPE})
-public @interface ScriptSqlProvider {
-
+public @interface Table {
+	String name();
 }

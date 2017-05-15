@@ -1,12 +1,11 @@
 package experiment.provider;
 
-import javax.persistence.Table;
-
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 
+import cn.howso.framework.mybatis.provider.Table;
 import experiment.plugin.PluginHelper;
 /**该类所有的方法都修改boundSql的sql和parameterObject。它并不是配合Provider注解使用的，
  * 而是配合Select等注解使用。

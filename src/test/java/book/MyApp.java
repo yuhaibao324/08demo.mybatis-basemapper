@@ -14,10 +14,12 @@ import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
 
 import cn.howso.framework.mybatis.pagination.IndexPage;
 import experiment.mapper.UserMapper;
+import experiment.mapper.UserRoleMidMapper;
 import experiment.model.User;
 import experiment.model.UserExample;
+import experiment.model.UserRoleMidExample;
 
-public class App {
+public class MyApp{
 	public static void main(String[] args) throws IOException {
 		String resource = "configuration.xml";
 		Reader reader = Resources.getResourceAsReader(resource);
@@ -28,6 +30,7 @@ public class App {
 		//SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
 		SqlSession session = sqlSessionFactory.openSession();
 		UserMapper userMapper = session.getMapper(UserMapper.class);
+		UserRoleMidMapper userRoleMidMapper = session.getMapper(UserRoleMidMapper.class);
 		//User user = userMapper.selectByPrimaryKey(1);
 		//user = userMapper.selectByPrimaryKey(1);
 		UserExample example = new UserExample();
@@ -46,6 +49,13 @@ public class App {
 		//System.out.println(i);
 		List<User> res = userMapper.selectByExampleByPage(example,page );
 		System.out.println(res);
+		
+		UserRoleMidExample urmExample = new UserRoleMidExample();
+		urmExample.createCriteria().andRoleIdIsNotNull();
+		userRoleMidMapper.selectByExample(urmExample );
+		userRoleMidMapper.selectByExample(urmExample );
+		userRoleMidMapper.selectByExample(urmExample );
+		userRoleMidMapper.selectByExample(urmExample );
 		session.commit();
 	}
 }

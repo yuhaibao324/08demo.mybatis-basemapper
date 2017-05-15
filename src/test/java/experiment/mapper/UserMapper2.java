@@ -9,8 +9,8 @@ import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.SelectProvider;
 
 import cn.howso.framework.mybatis.pagination.IndexPage;
-import cn.howso.framework.mybatis.sqlprovider.ScriptSqlProviderImpl;
-import cn.howso.framework.mybatis.sqlprovider.Table;
+import cn.howso.framework.mybatis.provider.ScriptSqlProviderImpl;
+import cn.howso.framework.mybatis.provider.Table;
 import experiment.model.User;
 import experiment.model.UserExample;
 @Table(name="sys_user")

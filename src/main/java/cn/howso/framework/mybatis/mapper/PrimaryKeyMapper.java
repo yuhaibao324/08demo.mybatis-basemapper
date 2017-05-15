@@ -10,8 +10,8 @@ import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
-import cn.howso.framework.mybatis.sqlprovider.ProviderHelper;
-import cn.howso.framework.mybatis.sqlprovider.ScriptSqlProviderImpl;
+import cn.howso.framework.mybatis.provider.ProviderHelper;
+import cn.howso.framework.mybatis.provider.ScriptSqlProviderImpl;
 /**
  * 通常不直接使用该接口
  * */

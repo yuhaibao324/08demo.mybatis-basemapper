@@ -33,5 +33,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	</environments>
 	<mappers>
 		<mapper resource="book/mapper/UserMapper.xml" />
+		<mapper resource="book/mapper/UserRoleMidMapper.xml" />
 	</mappers>
 </configuration>

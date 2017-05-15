@@ -1,0 +1,27 @@
+项目目标：提供单表操作的通用dao而不必配置大量sql。
+使用方法：
+	1、将mybatis-extend.jar通过maven的pom引入到项目；
+	2、使用maven的mybatis-generator插件，生成model和example类、mapper.xml、mapper.java
+	3、删除mapper.xml中除了BaseResultMap之外的标签。或者自己手写BaseResultMap。
+	4、删除mapper.java中的所有接口。或者手写Mapper。
+	如果当前表有主键，继承cn.howso.framework.mybatis.mapper.BaseMapper接口。
+	如果当前表没有主键，那么继承cn.howso.framework.mybatis.mapper.ExampleMapper。
+	5、为mapper接口添加一个注解@cn.howso.framework.mybatis.provider.Table,name字段的值用表名填写。
+	6、如果接口需要插入记录并返回主键，那么重写PrimaryKeyMapper的insertSelectiveAndReturnPk方法。
+	并且为该方法添加SelectKey注解。
+	7、如果需要支持分页功能，那么需要在mybatis的configuration.xml中配置分页插件。
+	
+您将得到单表操作的15个常用方法。
+好处：
+1、单表操作的接口高度统一。只要理解一个Mapper，其他Mapper的单表操作接口无需解释即懂。
+2、Mapper.xml非常干净！！！没有了大量模板代码，sql文件易读易维护。
+3、表发生更改时，基本上只需要做微小的改动。修改BaseResultMap，重新生成model和example。
+4、ScriptSqlProvider生成的sql，和Mapper.xml中配置的sql几乎是一致的。可读性很好。
+由于model和example我们永远不去修改他们，所以不会和我们自己的代码混在一起。
+风险：
+1、可能存在一些bug；由于代码中并没有用到全局变量，也没有去修改上下文内容。
+所以并不会出现并发问题。
+需要注意的是，ScriptSqlProvider中方法产生sql，随着Mapper的方法每次调用都会执行。
+2、依赖了mybatis-generator插件生成model和example（这个问题不大）；
+3、可能存在的性能问题；
+由于ScriptSqlProvider中产生的sql字符串并不依赖运行时产生的变量，因此可以将sql缓存起来（如果必要的话）。
