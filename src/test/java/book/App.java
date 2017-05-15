@@ -12,7 +12,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
 
-import cn.howso.framework.mybatis.pagination.Page;
+import cn.howso.framework.mybatis.pagination.IndexPage;
 import experiment.mapper.UserMapper;
 import experiment.model.User;
 import experiment.model.UserExample;
@@ -40,7 +40,7 @@ public class App {
 		//System.out.println(n);
 		User record = new User();
 		record.setName("aidehua");
-		Page page =  Page.fromNumSize(1, 2);
+		IndexPage page =  IndexPage.of(1, 2);
         //record.setId(-1);
         //int i = userMapper.deleteByPrimaryKey(1);
 		//System.out.println(i);

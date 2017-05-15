@@ -5,7 +5,7 @@ public class LimitPage extends Pageable{
     private int limit = 20; // 每页显示记录数
     private int offset = 0; // 每页显示记录数
 
-    public static LimitPage fromLimitOffset(int limit,int offset){
+    public static LimitPage of(int limit,int offset){
         LimitPage page = new LimitPage();
         page.setLimit(limit);
         page.setOffset(offset);

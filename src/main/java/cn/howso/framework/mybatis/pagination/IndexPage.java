@@ -8,30 +8,30 @@ package cn.howso.framework.mybatis.pagination;
  * @author wzf
  * @date 2016年3月15日 上午9:16:24
  */
-public class Page extends Pageable{
+public class IndexPage extends Pageable{
 
     /** 当前页,从1开始 */
-    private int num;
+    private int index;
 
     /** 每页显示记录数 */
     private int size;
-    public static Page fromNumSize(int num,int size){
-        Page p = new Page();
-        p.num = num;
+    public static IndexPage of(int index,int size){
+        IndexPage p = new IndexPage();
+        p.index = index;
         p.size = size;
         return p;
     }
     public void setPageIndex(int pageIndex){
-        num = pageIndex;
+        index = pageIndex;
     }
     public void setRows(int rows){
         size = rows;
     }
-    public int getNum() {
-        return num;
+    public int getIndex() {
+        return index;
     }
-    public void setNum(int num) {
-        this.num = num;
+    public void setIndex(int index) {
+        this.index = index;
     }
     
     public int getSize() {
@@ -43,7 +43,7 @@ public class Page extends Pageable{
     @Override
     public String createPageSql(String sql, String dialect) {
         int limit = size;
-        int offset = (num-1)*size;
+        int offset = (index-1)*size;
         return super.createPageSql(sql, dialect, limit, offset);
     }
 }

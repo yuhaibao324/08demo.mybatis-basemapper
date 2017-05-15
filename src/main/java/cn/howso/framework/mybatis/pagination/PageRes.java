@@ -5,7 +5,7 @@ import java.util.List;
 public class PageRes<T> {
     private Integer total;
     private List<T> rows;
-    public static <T> PageRes<T> of(Page page,List<T> rows){
+    public static <T> PageRes<T> of(IndexPage page,List<T> rows){
         PageRes<T> pageRes = new PageRes<>();
         pageRes.total = page.getTotal();
         pageRes.setRows(rows);

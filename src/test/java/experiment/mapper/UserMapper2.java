@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.SelectProvider;
 
-import cn.howso.framework.mybatis.pagination.Page;
+import cn.howso.framework.mybatis.pagination.IndexPage;
 import cn.howso.framework.mybatis.sqlprovider.ScriptSqlProviderImpl;
 import cn.howso.framework.mybatis.sqlprovider.Table;
 import experiment.model.User;
@@ -44,7 +44,7 @@ public interface UserMapper2{
 
 	int updateByPrimaryKey(@Param("record") User record);
 
-	List<User> selectByExampleByPage(@Param("example") UserExample example, @Param("page") Page page);
+	List<User> selectByExampleByPage(@Param("example") UserExample example, @Param("page") IndexPage page);
 
 	int batchDeleteByExample(@Param("example") UserExample example);
 

@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
-import cn.howso.framework.mybatis.pagination.Page;
+import cn.howso.framework.mybatis.pagination.IndexPage;
 import cn.howso.framework.mybatis.sqlprovider.ProviderHelper;
 import cn.howso.framework.mybatis.sqlprovider.ScriptSqlProviderImpl;
 /**
@@ -47,7 +47,7 @@ public interface ExampleMapper<ENTITY, EXAMPLE> {
 
 	@ResultMap(ProviderHelper.BASE_RESULT_MAP)
 	@SelectProvider(type = ScriptSqlProviderImpl.class, method = "selectByExampleByPage")
-	List<ENTITY> selectByExampleByPage(@Param("example") EXAMPLE example, @Param("page") Page page);
+	List<ENTITY> selectByExampleByPage(@Param("example") EXAMPLE example, @Param("page") IndexPage page);
 
 	@ResultType(Integer.class)
 	@InsertProvider(type = ScriptSqlProviderImpl.class, method = "batchInsert")
