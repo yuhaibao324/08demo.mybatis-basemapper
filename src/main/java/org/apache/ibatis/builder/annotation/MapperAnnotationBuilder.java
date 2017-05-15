@@ -89,9 +89,10 @@ import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 import org.apache.ibatis.type.UnknownTypeHandler;
 
-import book.sqlprovider.ProviderUtils;
+import cn.howso.framework.mybatis.sqlprovider.ProviderHelper;
 
 /**
+ * 这个类的包路径不可以修改，因为是用于覆盖mybatis的类。
  * @author Clinton Begin
  */
 public class MapperAnnotationBuilder {
@@ -467,9 +468,9 @@ public class MapperAnnotationBuilder {
         return buildSqlSourceFromStrings(strings, parameterType, languageDriver);
       } else if (sqlProviderAnnotationType != null) {
         Annotation sqlProviderAnnotation = method.getAnnotation(sqlProviderAnnotationType);
-        //modified by zhoujiaping,at 2017-05-14 修改源码，支持SqlProvider写带标签的动态sql。
-        if(ProviderUtils.isScriptSqlProvider(sqlProviderAnnotation)){
-        	String string = ProviderUtils.getSql(assistant,method,parameterType,sqlProviderAnnotation);
+        //TODO modified by zhoujiaping,at 2017-05-14 修改源码，支持SqlProvider写带标签的动态sql。
+        if(ProviderHelper.isScriptSqlProvider(sqlProviderAnnotation, sqlProviderAnnotationType)){
+        	String string = ProviderHelper.create(assistant,method, sqlProviderAnnotation, sqlProviderAnnotationType).getSql();
         	return buildSqlSourceFromStrings(new String[]{string},parameterType,languageDriver);
         }else{
         	return new ProviderSqlSource(assistant.getConfiguration(), sqlProviderAnnotation);
