@@ -3,6 +3,7 @@ package cn.howso.framework.mybatis.sqlprovider;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.ibatis.mapping.ResultMapping;
@@ -67,7 +68,12 @@ public class ScriptSqlProviderImpl {
     }
 
     public String insertSelective(ProviderHelper helper) {
-        List<String> sql = new ArrayList<>();
+        List<String> sql = insertSelectiveInternal(helper);
+        return wrapScript(String.join(lineSeparator, sql));
+    }
+
+	private List<String> insertSelectiveInternal(ProviderHelper helper) {
+		List<String> sql = new ArrayList<>();
         sql.add("insert into " + helper.getTablename());
         sql.add("<trim prefix='(' suffix=')' suffixOverrides=','>");
         sql.add(helper.getResultMappings().stream().map(mapping -> {
@@ -80,8 +86,8 @@ public class ScriptSqlProviderImpl {
                     mapping.getProperty(), mapping.getProperty());
         }).collect(Collectors.joining(lineSeparator)));
         sql.add("</trim>");
-        return wrapScript(String.join(lineSeparator, sql));
-    }
+		return sql;
+	}
 
     public String selectByExample(ProviderHelper helper) {
         List<String> sql = new ArrayList<>();
@@ -204,6 +210,28 @@ public class ScriptSqlProviderImpl {
         return wrapScript(String.join(lineSeparator, sql));
     }
 
+    /**
+     * 
+     * @param helper
+     * @return
+     */
+    public String insertSelectiveAndReturnPk(ProviderHelper helper){
+    	ResultMapping idMapping = helper.getIdResultMapping();
+    	String typename = idMapping.getJavaType().getSimpleName().toLowerCase();
+    	List<String> sql = new ArrayList<>();
+    	sql.add(String.format("<selectKey keyProperty='%s' order='BEFORE' resultType='%s'>", idMapping.getProperty(),typename));
+    	if("string".equals(typename)){
+    		sql.add("select "+UUID.randomUUID());
+    	}else if("integer".equals(typename)){
+    		sql.add(String.format("select nextVal('%s_%s_seq')", helper.getTablename(),idMapping.getColumn()));
+    	}else{
+    		throw new RuntimeException("unsupported id type:"+typename);
+    	}
+    	sql.add("</selectKey>");
+    	//+helper.getTablename());
+    	sql.addAll(insertSelectiveInternal(helper));  
+    	return wrapScript(String.join(lineSeparator, sql));
+    }
     private String exampleWhereClause(ProviderHelper helper) {
         List<String> sql = new ArrayList<>();
         sql.add("<where>");
