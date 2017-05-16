@@ -1,6 +1,8 @@
 package experiment.mapper;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultType;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.mapping.StatementType;
 
@@ -13,4 +15,7 @@ public interface UserMapper extends BaseMapper<User,UserExample,Integer>{
 	@Override
 	@SelectKey(before=true,statement="select nextVal(sys_user_id_seq)",keyColumn="id",keyProperty="id",resultType=Integer.class,statementType=StatementType.STATEMENT)
 	Integer insertSelectiveAndReturnPk(@Param("record")User user);
+	@ResultType(Integer.class)
+	@Select("select count(*) from sys_user")
+	Integer selectByMine();
 }

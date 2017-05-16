@@ -49,13 +49,13 @@ public class MyApp{
 		//System.out.println(i);
 		List<User> res = userMapper.selectByExampleByPage(example,page );
 		System.out.println(res);
-		
-		UserRoleMidExample urmExample = new UserRoleMidExample();
+		userMapper.selectByMine();
+		/*UserRoleMidExample urmExample = new UserRoleMidExample();
 		urmExample.createCriteria().andRoleIdIsNotNull();
 		userRoleMidMapper.selectByExample(urmExample );
 		userRoleMidMapper.selectByExample(urmExample );
 		userRoleMidMapper.selectByExample(urmExample );
-		userRoleMidMapper.selectByExample(urmExample );
+		userRoleMidMapper.selectByExample(urmExample );*/
 		session.commit();
 	}
 }

@@ -22,6 +22,7 @@ public interface ExampleMapper<ENTITY, EXAMPLE> {
 	int countByExample(@Param("example") EXAMPLE example);
 
 	@ResultType(Integer.class)
+	//@Delete("<script>delete from sys_user <where> id=#{id}</where></script>")
 	@DeleteProvider(type = ScriptSqlProviderImpl.class, method = "deleteByExample")
 	int deleteByExample(@Param("example") EXAMPLE example);
 
