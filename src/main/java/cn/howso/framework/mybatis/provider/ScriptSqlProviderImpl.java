@@ -177,7 +177,7 @@ public class ScriptSqlProviderImpl {
         String.join(",", helper.getMappedColumns());
         sql.add(")values");
         sql.add("<foreach collection='recordList' item='record' separator=','>");
-        sql.add(helper.getResultMap().getResultMappings().stream().map(mapping -> {
+        sql.add(helper.getResultMappings().stream().map(mapping -> {
             return String.format("#{record.%s,jdbcType=%s}", mapping.getProperty(), mapping.getJdbcType());
         }).collect(Collectors.joining(",", "(", ")")));
         sql.add("</foreach>");
@@ -200,7 +200,7 @@ public class ScriptSqlProviderImpl {
         sql.add("values");
         sql.add("<foreach collection='recordList' item='record' separator=','>");
         sql.add("<trim prefix='(' suffix=')' suffixOverrides=','>");
-        sql.add(helper.getResultMap().getResultMappings().stream().map(mapping -> {
+        sql.add(helper.getResultMappings().stream().map(mapping -> {
             return String.format("<if test='record.%s != null'>#{record.%s,jdbcType=%s},</if>", mapping.getProperty(),
                     mapping.getProperty(), mapping.getJdbcType());
         }).collect(Collectors.joining(lineSeparator)));
