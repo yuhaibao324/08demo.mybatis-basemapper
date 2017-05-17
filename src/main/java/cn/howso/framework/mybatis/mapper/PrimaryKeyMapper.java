@@ -9,8 +9,8 @@ import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
+import org.apache.ibatis.builder.annotation.ProviderHelper;
 
-import cn.howso.framework.mybatis.provider.ProviderHelper;
 import cn.howso.framework.mybatis.provider.ScriptSqlProviderImpl;
 /**
  * 通常不直接使用该接口

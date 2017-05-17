@@ -31,7 +31,7 @@ import cn.howso.framework.mybatis.util.ReflectHelper;
  * @author wzf
  * @date 2016年3月15日 上午9:44:22
  */
-@Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class,Integer.class}) })
+@Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class}) })
 public class PagePlugin implements Interceptor {
 
     private static String dialect = ""; // 数据库方言

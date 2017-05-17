@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.ibatis.annotations.ScriptSqlProvider;
+import org.apache.ibatis.builder.annotation.ProviderHelper;
 import org.apache.ibatis.mapping.ResultMapping;
 
 /**

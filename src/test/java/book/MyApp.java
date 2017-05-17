@@ -58,4 +58,5 @@ public class MyApp{
 		userRoleMidMapper.selectByExample(urmExample );*/
 		session.commit();
 	}
+
 }

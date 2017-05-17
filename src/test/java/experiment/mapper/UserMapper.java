@@ -4,10 +4,10 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
+import org.apache.ibatis.annotations.Table;
 import org.apache.ibatis.mapping.StatementType;
 
 import cn.howso.framework.mybatis.mapper.BaseMapper;
-import cn.howso.framework.mybatis.provider.Table;
 import experiment.model.User;
 import experiment.model.UserExample;
 @Table(name="sys_user")
