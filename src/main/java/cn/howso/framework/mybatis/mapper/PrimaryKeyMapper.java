@@ -36,8 +36,10 @@ public interface PrimaryKeyMapper<ENTITY,PK>{
 	@ResultType(Integer.class)
     @UpdateProvider(type = ScriptSqlProviderImpl.class, method = "updateByPrimaryKey")
 	int updateByPrimaryKey(@Param("record") ENTITY record);
-	
+	/**
+	 * 子接口需要重写该接口，添加SelectKey注解实现功能。
+	 * */
 	@ResultType(Serializable.class)
-	@InsertProvider(type = ScriptSqlProviderImpl.class, method = "insertSelectiveAndReturnPk")
-	PK insertSelectiveAndReturnPk(@Param("record")ENTITY record);
+	@InsertProvider(type = ScriptSqlProviderImpl.class, method = "insertSelectiveSelectKey")
+	int insertSelectiveSelectKey(@Param("record")ENTITY record);
 }

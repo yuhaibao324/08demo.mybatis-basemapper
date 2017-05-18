@@ -14,7 +14,7 @@ import experiment.model.UserExample;
 public interface UserMapper extends BaseMapper<User,UserExample,Integer>{
 	@Override
 	@SelectKey(before=true,statement="select nextVal(sys_user_id_seq)",keyColumn="id",keyProperty="id",resultType=Integer.class,statementType=StatementType.STATEMENT)
-	Integer insertSelectiveAndReturnPk(@Param("record")User user);
+	int insertSelectiveSelectKey(@Param("record")User user);
 	@ResultType(Integer.class)
 	@Select("select count(*) from sys_user")
 	Integer selectByMine();

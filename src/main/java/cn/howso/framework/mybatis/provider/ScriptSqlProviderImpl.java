@@ -216,7 +216,7 @@ public class ScriptSqlProviderImpl {
      * @param helper
      * @return
      */
-    public String insertSelectiveAndReturnPk(ProviderHelper helper){
+    public String insertSelectiveSelectKey(ProviderHelper helper){
     	return wrapScript(String.join(lineSeparator, insertSelectiveInternal(helper)));
     }
     private String exampleWhereClause(ProviderHelper helper) {
