@@ -78,12 +78,12 @@ public class ScriptSqlProviderImpl {
         sql.add("insert into " + helper.getTablename());
         sql.add("<trim prefix='(' suffix=')' suffixOverrides=','>");
         sql.add(helper.getResultMappings().stream().map(mapping -> {
-            return String.format("<if test='%s != null'>%s,</if>", mapping.getProperty(), mapping.getColumn());
+            return String.format("<if test='record.%s != null'>%s,</if>", mapping.getProperty(), mapping.getColumn());
         }).collect(Collectors.joining(lineSeparator)));
         sql.add("</trim>");
         sql.add("<trim prefix='values (' suffix=')' suffixOverrides=','>");
         sql.add(helper.getResultMappings().stream().map(mapping -> {
-            return String.format("<if test='%s != null'>#{%s,jdbcType=%s},</if>", mapping.getProperty(),
+            return String.format("<if test='record.%s != null'>#{%s,jdbcType=%s},</if>", mapping.getProperty(),
                     mapping.getProperty(), mapping.getProperty());
         }).collect(Collectors.joining(lineSeparator)));
         sql.add("</trim>");
