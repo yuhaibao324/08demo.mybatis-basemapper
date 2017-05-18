@@ -21,12 +21,6 @@ public class IndexPage extends Pageable{
         p.size = size;
         return p;
     }
-    public void setPageIndex(int pageIndex){
-        index = pageIndex;
-    }
-    public void setRows(int rows){
-        size = rows;
-    }
     public int getIndex() {
         return index;
     }
