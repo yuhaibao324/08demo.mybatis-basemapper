@@ -83,8 +83,8 @@ public class ScriptSqlProviderImpl {
         sql.add("</trim>");
         sql.add("<trim prefix='values (' suffix=')' suffixOverrides=','>");
         sql.add(helper.getResultMappings().stream().map(mapping -> {
-            return String.format("<if test='record.%s != null'>#{%s,jdbcType=%s},</if>", mapping.getProperty(),
-                    mapping.getProperty(), mapping.getProperty());
+            return String.format("<if test='record.%s != null'>#{record.%s,jdbcType=%s},</if>", mapping.getProperty(),
+                    mapping.getProperty(), mapping.getJdbcType());
         }).collect(Collectors.joining(lineSeparator)));
         sql.add("</trim>");
 		return sql;
