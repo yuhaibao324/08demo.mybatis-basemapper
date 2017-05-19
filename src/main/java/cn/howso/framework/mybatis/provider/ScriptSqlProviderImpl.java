@@ -70,12 +70,7 @@ public class ScriptSqlProviderImpl {
     }
 
     public String insertSelective(ProviderHelper helper) {
-        List<String> sql = insertSelectiveInternal(helper);
-        return wrapScript(String.join(lineSeparator, sql));
-    }
-
-	private List<String> insertSelectiveInternal(ProviderHelper helper) {
-		List<String> sql = new ArrayList<>();
+        List<String> sql = new ArrayList<>();
         sql.add("insert into " + helper.getTablename());
         sql.add("<trim prefix='(' suffix=')' suffixOverrides=','>");
         sql.add(helper.getResultMappings().stream().map(mapping -> {
@@ -88,8 +83,8 @@ public class ScriptSqlProviderImpl {
                     mapping.getProperty(), mapping.getJdbcType());
         }).collect(Collectors.joining(lineSeparator)));
         sql.add("</trim>");
-		return sql;
-	}
+        return wrapScript(String.join(lineSeparator, sql));
+    }
 
     public String selectByExample(ProviderHelper helper) {
         List<String> sql = new ArrayList<>();
@@ -234,11 +229,25 @@ public class ScriptSqlProviderImpl {
     public String insertSelectiveSelectKey(ProviderHelper helper){
         List<String> sql = new ArrayList<>();
         sql.add("insert into " + helper.getTablename());
+        sql.add("<trim prefix='(' suffix=')' suffixOverrides=','>");
+        sql.add(helper.getResultMappings().stream().map(mapping -> {
+            return String.format("<if test='%s != null'>%s,</if>", mapping.getProperty(), mapping.getColumn());
+        }).collect(Collectors.joining(lineSeparator)));
+        sql.add("</trim>");
+        sql.add("<trim prefix='values (' suffix=')' suffixOverrides=','>");
+        sql.add(helper.getResultMappings().stream().map(mapping -> {
+            return String.format("<if test='%s != null'>#{%s,jdbcType=%s},</if>", mapping.getProperty(),
+                    mapping.getProperty(), mapping.getJdbcType());
+        }).collect(Collectors.joining(lineSeparator)));
+        sql.add("</trim>");
+        
+        /*List<String> sql = new ArrayList<>();
+        sql.add("insert into " + helper.getTablename());
         sql.add(helper.getResultMappings().stream().map(item->item.getColumn()).collect(Collectors.joining(",", "(", ")")));
         sql.add("values ");
         sql.add(helper.getResultMappings().stream().map(mapping -> {
             return "#{" + mapping.getProperty() + ",jdbcType=" + mapping.getJdbcType() + "}";
-        }).collect(Collectors.joining(",", "(", ")")));
+        }).collect(Collectors.joining(",", "(", ")")));*/
         return wrapScript(String.join(lineSeparator, sql));
     }
     private String exampleWhereClause(ProviderHelper helper) {

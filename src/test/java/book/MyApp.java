@@ -30,11 +30,11 @@ public class MyApp{
 		UserMapper userMapper = session.getMapper(UserMapper.class);
 		User user = new User();
 		user.setName("mayun");
-		/*userMapper.insertSelectiveSelectKey(user);
-		System.out.println(user.getId());*/
-		List<User> recordList = new ArrayList<>();
+		userMapper.insertSelectiveSelectKey(user);
+		System.out.println(user.getId());
+		/*List<User> recordList = new ArrayList<>();
 		user.setId(-4);
-		recordList.add(user);
+		recordList.add(user);*/
         //userMapper.batchInsertSelective(recordList);
         
         UserExample example = new UserExample();
@@ -53,8 +53,8 @@ public class MyApp{
         //userMapper.selectByPrimaryKey(-4);
         //userMapper.updateByExampleSelective(user, example);
         //userMapper.updateByPrimaryKey(user);
-        user.setLabelId(1);
-        userMapper.updateByPrimaryKeySelective(user);
+        //user.setLabelId(1);
+        //userMapper.updateByPrimaryKeySelective(user);
 		session.commit();
 	}
 
