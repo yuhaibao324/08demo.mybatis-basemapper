@@ -21,25 +21,21 @@ public interface PrimaryKeyMapper<ENTITY,PK>{
 	int deleteByPrimaryKey(@Param("id")PK id);//@Param("id")不要删除，约定名称为传参名为id，这样简单方便。
 	
 	@ResultMap(ProviderHelper.BASE_RESULT_MAP)
-	//@Select("selectByPrimaryKey")
 	@SelectProvider(type = ScriptSqlProviderImpl.class, method = "selectByPrimaryKey")
-/*	@Select({"<script>select ",
-		"id,name,label_id",
-        "from sys_user",
-        "<where>id = #{id,jdbcType=INTEGER}</where> ",
-        "</script>"})*/
 	ENTITY selectByPrimaryKey(@Param("id") PK id);//@Param("id")不要删除，约定名称为传参名为id，这样简单方便。
+	
 	@ResultType(Integer.class)
     @UpdateProvider(type = ScriptSqlProviderImpl.class, method = "updateByPrimaryKeySelective")
-	int updateByPrimaryKeySelective(@Param("record") ENTITY record);
+	int updateByPrimaryKeySelective(ENTITY record);
 
 	@ResultType(Integer.class)
     @UpdateProvider(type = ScriptSqlProviderImpl.class, method = "updateByPrimaryKey")
-	int updateByPrimaryKey(@Param("record") ENTITY record);
+	int updateByPrimaryKey(ENTITY record);
 	/**
-	 * 子接口需要重写该接口，添加SelectKey注解实现功能。
+	 * 子接口需要重写该接口，添加@ResultType,@InsertProvider,@SelectKey注解实现功能。
+	 * 注意！！！注解方式使用@SelectKey，方法参数不能用@Param注解！！！
 	 * */
 	@ResultType(Serializable.class)
 	@InsertProvider(type = ScriptSqlProviderImpl.class, method = "insertSelectiveSelectKey")
-	int insertSelectiveSelectKey(@Param("record")ENTITY record);
+	int insertSelectiveSelectKey(ENTITY record);
 }

@@ -2,7 +2,7 @@ package book;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.builder.xml.XMLConfigBuilder;
@@ -12,12 +12,10 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
 
-import cn.howso.framework.mybatis.pagination.IndexPage;
+import cn.howso.framework.mybatis.pagination.LimitPage;
 import experiment.mapper.UserMapper;
-import experiment.mapper.UserRoleMidMapper;
 import experiment.model.User;
 import experiment.model.UserExample;
-import experiment.model.UserRoleMidExample;
 
 public class MyApp{
 	public static void main(String[] args) throws IOException {
@@ -30,32 +28,33 @@ public class MyApp{
 		//SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
 		SqlSession session = sqlSessionFactory.openSession();
 		UserMapper userMapper = session.getMapper(UserMapper.class);
-		UserRoleMidMapper userRoleMidMapper = session.getMapper(UserRoleMidMapper.class);
-		//User user = userMapper.selectByPrimaryKey(1);
-		//user = userMapper.selectByPrimaryKey(1);
-		UserExample example = new UserExample();
-		example.createCriteria().andIdIn(Arrays.asList(new Integer[]{-1,1,2,3,4,5,6}));//.andIdEqualTo(1).andIdBetween(0, 2);
-		//example.or().andNameIn(Arrays.asList(new String[]{"1","2","3"})).andLabelIdIsNull();
-		//example.createCriteria().andNameIn(Arrays.asList(new String[]{"1","2","3"}));
+		User user = new User();
+		user.setName("mayun");
+		/*userMapper.insertSelectiveSelectKey(user);
+		System.out.println(user.getId());*/
+		List<User> recordList = new ArrayList<>();
+		user.setId(-4);
+		recordList.add(user);
+        //userMapper.batchInsertSelective(recordList);
+        
+        UserExample example = new UserExample();
+        example.createCriteria().andNameLike("ma%").andIdEqualTo(-4);
+        //userMapper.batchInsert(recordList);
 		//int count = userMapper.countByExample(example );
 		//System.out.println(count);
-		//int n = userMapper.deleteByExample(example);
-		//System.out.println(n);
-		User record = new User();
-		record.setName("aidehua");
-		IndexPage page =  IndexPage.of(1, 2);
-        //record.setId(-1);
-        //int i = userMapper.deleteByPrimaryKey(1);
-		//System.out.println(i);
-		List<User> res = userMapper.selectByExampleByPage(example,page );
-		System.out.println(res);
-		userMapper.selectByMine();
-		/*UserRoleMidExample urmExample = new UserRoleMidExample();
-		urmExample.createCriteria().andRoleIdIsNotNull();
-		userRoleMidMapper.selectByExample(urmExample );
-		userRoleMidMapper.selectByExample(urmExample );
-		userRoleMidMapper.selectByExample(urmExample );
-		userRoleMidMapper.selectByExample(urmExample );*/
+        
+       // userMapper.deleteByExample(example);
+        
+        //userMapper.insert(user);
+        
+        //userMapper.insertSelective(user);
+       // userMapper.selectByExample(example);
+        //userMapper.selectByExampleByPage(example, LimitPage.of(10, 0));
+        //userMapper.selectByPrimaryKey(-4);
+        //userMapper.updateByExampleSelective(user, example);
+        //userMapper.updateByPrimaryKey(user);
+        user.setLabelId(1);
+        userMapper.updateByPrimaryKeySelective(user);
 		session.commit();
 	}
 

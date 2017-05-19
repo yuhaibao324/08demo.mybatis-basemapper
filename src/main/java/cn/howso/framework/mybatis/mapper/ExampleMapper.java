@@ -12,6 +12,7 @@ import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.builder.annotation.ProviderHelper;
 
 import cn.howso.framework.mybatis.pagination.IndexPage;
+import cn.howso.framework.mybatis.pagination.Pageable;
 import cn.howso.framework.mybatis.provider.ScriptSqlProviderImpl;
 /**
  * 如果定义的表没有主键，则不需要关于主键的方法，那么继承这个接口更合适
@@ -19,24 +20,24 @@ import cn.howso.framework.mybatis.provider.ScriptSqlProviderImpl;
 public interface ExampleMapper<ENTITY, EXAMPLE> {
 	@ResultType(Integer.class)
 	@SelectProvider(type = ScriptSqlProviderImpl.class, method = "countByExample")
-	int countByExample(@Param("example") EXAMPLE example);
+	int countByExample(EXAMPLE example);
 
 	@ResultType(Integer.class)
 	//@Delete("<script>delete from sys_user <where> id=#{id}</where></script>")
 	@DeleteProvider(type = ScriptSqlProviderImpl.class, method = "deleteByExample")
-	int deleteByExample(@Param("example") EXAMPLE example);
+	int deleteByExample(EXAMPLE example);
 
 	@ResultType(Integer.class)
 	@InsertProvider(type = ScriptSqlProviderImpl.class, method = "insert")
-	int insert(@Param("record") ENTITY record);
+	int insert(ENTITY record);
 
 	@ResultType(Integer.class)
 	@InsertProvider(type = ScriptSqlProviderImpl.class, method = "insertSelective")
-	int insertSelective(@Param("record") ENTITY record);
+	int insertSelective(ENTITY record);
 
 	@ResultMap(ProviderHelper.BASE_RESULT_MAP)
 	@SelectProvider(type = ScriptSqlProviderImpl.class, method = "selectByExample")
-	List<ENTITY> selectByExample(@Param("example") EXAMPLE example);
+	List<ENTITY> selectByExample(EXAMPLE example);
 
 	@ResultType(Integer.class)
 	@UpdateProvider(type = ScriptSqlProviderImpl.class, method = "updateByExampleSelective")
@@ -48,7 +49,7 @@ public interface ExampleMapper<ENTITY, EXAMPLE> {
 
 	@ResultMap(ProviderHelper.BASE_RESULT_MAP)
 	@SelectProvider(type = ScriptSqlProviderImpl.class, method = "selectByExampleByPage")
-	List<ENTITY> selectByExampleByPage(@Param("example") EXAMPLE example, @Param("page") IndexPage page);
+	List<ENTITY> selectByExampleByPage(@Param("example") EXAMPLE example, @Param("page") Pageable page);
 
 	@ResultType(Integer.class)
 	@InsertProvider(type = ScriptSqlProviderImpl.class, method = "batchInsert")

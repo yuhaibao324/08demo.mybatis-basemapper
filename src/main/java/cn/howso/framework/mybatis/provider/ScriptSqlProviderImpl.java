@@ -35,7 +35,7 @@ public class ScriptSqlProviderImpl {
         List<String> sql = new ArrayList<>();
         sql.add("select count(*) from " + helper.getTablename());
         sql.add("<if test='_parameter != null'>");
-        sql.add(exampleWhereClause(helper));
+        sql.add(whereClause(helper));
         sql.add("</if>");
         return wrapScript(String.join(lineSeparator, sql));
     }
@@ -44,7 +44,7 @@ public class ScriptSqlProviderImpl {
         List<String> sql = new ArrayList<>();
         sql.add("delete from " + helper.getTablename());
         sql.add("<if test='_parameter != null'>");
-        sql.add(exampleWhereClause(helper));
+        sql.add(whereClause(helper));
         sql.add("</if>");
         return wrapScript(String.join(lineSeparator, sql));
     }
@@ -58,9 +58,10 @@ public class ScriptSqlProviderImpl {
     }
 
     public String insert(ProviderHelper helper) {
+        //getMappedColumns和getResultMappings的字段顺序不是一致的。
         List<String> sql = new ArrayList<>();
         sql.add("insert into " + helper.getTablename());
-        sql.add("(" + String.join(",", helper.getMappedColumns()) + ")");
+        sql.add(helper.getResultMappings().stream().map(item->item.getColumn()).collect(Collectors.joining(",", "(", ")")));
         sql.add("values ");
         sql.add(helper.getResultMappings().stream().map(mapping -> {
             return "#{" + mapping.getProperty() + ",jdbcType=" + mapping.getJdbcType() + "}";
@@ -78,12 +79,12 @@ public class ScriptSqlProviderImpl {
         sql.add("insert into " + helper.getTablename());
         sql.add("<trim prefix='(' suffix=')' suffixOverrides=','>");
         sql.add(helper.getResultMappings().stream().map(mapping -> {
-            return String.format("<if test='record.%s != null'>%s,</if>", mapping.getProperty(), mapping.getColumn());
+            return String.format("<if test='%s != null'>%s,</if>", mapping.getProperty(), mapping.getColumn());
         }).collect(Collectors.joining(lineSeparator)));
         sql.add("</trim>");
         sql.add("<trim prefix='values (' suffix=')' suffixOverrides=','>");
         sql.add(helper.getResultMappings().stream().map(mapping -> {
-            return String.format("<if test='record.%s != null'>#{record.%s,jdbcType=%s},</if>", mapping.getProperty(),
+            return String.format("<if test='%s != null'>#{%s,jdbcType=%s},</if>", mapping.getProperty(),
                     mapping.getProperty(), mapping.getJdbcType());
         }).collect(Collectors.joining(lineSeparator)));
         sql.add("</trim>");
@@ -93,17 +94,17 @@ public class ScriptSqlProviderImpl {
     public String selectByExample(ProviderHelper helper) {
         List<String> sql = new ArrayList<>();
         sql.add("select");
-        sql.add("<if test='example.distinct' >");
+        sql.add("<if test='distinct' >");
         sql.add("distinct");
         sql.add("</if>");
         sql.add("'false' as QUERYID,");
         sql.add(String.join(",", helper.getMappedColumns()));
         sql.add("from " + helper.getTablename());
         sql.add("<if test='_parameter != null' >");
-        sql.add(exampleWhereClause(helper));
+        sql.add(whereClause(helper));
         sql.add("</if>");
-        sql.add("<if test='example.orderByClause != null'>");
-        sql.add("order by ${example.orderByClause}");
+        sql.add("<if test='orderByClause != null'>");
+        sql.add("order by ${orderByClause}");
         sql.add("</if>");
         return wrapScript(String.join(lineSeparator, sql));
     }
@@ -143,12 +144,12 @@ public class ScriptSqlProviderImpl {
         ResultMapping idRM = helper.getIdResultMapping();
         sql.add("update " + helper.getTablename());
         sql.add("<set>");
-        sql.add(helper.getResultMappings().stream().map(mapping -> {
-            return String.format("<if test='record.%s != null'>%s = #{record.%s,jdbcType=%s},</if>",
+        sql.add(helper.getResultMappings().stream().filter(mapping->!mapping.getColumn().equals(idRM.getColumn())).map(mapping -> {
+            return String.format("<if test='%s != null'>%s = #{%s,jdbcType=%s},</if>",
                     mapping.getProperty(), mapping.getColumn(), mapping.getProperty(), mapping.getJdbcType());
         }).collect(Collectors.joining(lineSeparator)));
         sql.add("</set>");
-        sql.add(String.format("where %s=#{example.%s,jdbcType=%s}", idRM.getColumn(), idRM.getProperty(),
+        sql.add(String.format("where %s=#{%s,jdbcType=%s}", idRM.getColumn(), idRM.getProperty(),
                 idRM.getJdbcType()));
         return wrapScript(String.join(lineSeparator, sql));
     }
@@ -159,10 +160,10 @@ public class ScriptSqlProviderImpl {
         sql.add("update " + helper.getTablename());
         sql.add(" set ");
         sql.add(helper.getResultMappings().stream().map(mapping -> {
-            return String.format("%s = #{record.%s,jdbcType=%s},", mapping.getColumn(), mapping.getProperty(),
+            return String.format("%s = #{%s,jdbcType=%s}", mapping.getColumn(), mapping.getProperty(),
                     mapping.getJdbcType());
-        }).collect(Collectors.joining(lineSeparator)));
-        sql.add(String.format("where %s=#{record.%s,jdbcType=%s}", idRM.getColumn(), idRM.getProperty(),
+        }).collect(Collectors.joining(",")));
+        sql.add(String.format("where %s=#{%s,jdbcType=%s}", idRM.getColumn(), idRM.getProperty(),
                 idRM.getJdbcType()));
         return wrapScript(String.join(lineSeparator, sql));
     }
@@ -170,14 +171,28 @@ public class ScriptSqlProviderImpl {
     /** 由插件去实现分页，该方法只是配合插件 */
 
     public String selectByExampleByPage(ProviderHelper helper) {
-        return selectByExample(helper);
+        List<String> sql = new ArrayList<>();
+        sql.add("select");
+        sql.add("<if test='example.distinct' >");
+        sql.add("distinct");
+        sql.add("</if>");
+        sql.add("'false' as QUERYID,");
+        sql.add(String.join(",", helper.getMappedColumns()));
+        sql.add("from " + helper.getTablename());
+        sql.add("<if test='_parameter != null' >");
+        sql.add(exampleWhereClause(helper));
+        sql.add("</if>");
+        sql.add("<if test='example.orderByClause != null'>");
+        sql.add("order by ${example.orderByClause}");
+        sql.add("</if>");
+        return wrapScript(String.join(lineSeparator, sql));
     }
 
     public String batchInsert(ProviderHelper helper) {
         List<String> sql = new ArrayList<>();
-        sql.add("insert into " + helper.getTablename() + "(");
-        String.join(",", helper.getMappedColumns());
-        sql.add(")values");
+        sql.add("insert into " + helper.getTablename());
+        sql.add(helper.getResultMappings().stream().map(item->item.getColumn()).collect(Collectors.joining(",","(",")")));
+        sql.add("values");
         sql.add("<foreach collection='recordList' item='record' separator=','>");
         sql.add(helper.getResultMappings().stream().map(mapping -> {
             return String.format("#{record.%s,jdbcType=%s}", mapping.getProperty(), mapping.getJdbcType());
@@ -217,12 +232,50 @@ public class ScriptSqlProviderImpl {
      * @return
      */
     public String insertSelectiveSelectKey(ProviderHelper helper){
-    	return wrapScript(String.join(lineSeparator, insertSelectiveInternal(helper)));
+        List<String> sql = new ArrayList<>();
+        sql.add("insert into " + helper.getTablename());
+        sql.add(helper.getResultMappings().stream().map(item->item.getColumn()).collect(Collectors.joining(",", "(", ")")));
+        sql.add("values ");
+        sql.add(helper.getResultMappings().stream().map(mapping -> {
+            return "#{" + mapping.getProperty() + ",jdbcType=" + mapping.getJdbcType() + "}";
+        }).collect(Collectors.joining(",", "(", ")")));
+        return wrapScript(String.join(lineSeparator, sql));
     }
     private String exampleWhereClause(ProviderHelper helper) {
         List<String> sql = new ArrayList<>();
         sql.add("<where>");
         sql.add("<foreach collection='example.oredCriteria' item='criteria' separator='or'>");
+        sql.add("<if test='criteria.valid'>");
+        sql.add("<trim prefix='(' prefixOverrides='and' suffix=')'>");
+        sql.add("<foreach collection='criteria.criteria' item='criterion'>");
+        sql.add("<choose>");
+        sql.add("<when test='criterion.noValue'>");
+        sql.add("and ${criterion.condition}");
+        sql.add("</when>");
+        sql.add("<when test='criterion.singleValue'>");
+        sql.add("and ${criterion.condition} #{criterion.value}");
+        sql.add("</when>");
+        sql.add("<when test='criterion.betweenValue'>");
+        sql.add("and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}");
+        sql.add("</when>");
+        sql.add("<when test='criterion.listValue'>");
+        sql.add("and ${criterion.condition}");
+        sql.add("<foreach close=')' collection='criterion.value' item='listItem' open='(' separator=','>");
+        sql.add("#{listItem}");
+        sql.add("</foreach>");
+        sql.add("</when>");
+        sql.add("</choose>");
+        sql.add("</foreach>");
+        sql.add("</trim>");
+        sql.add("</if>");
+        sql.add("</foreach>");
+        sql.add("</where>");
+        return String.join(lineSeparator, sql);
+    }
+    private String whereClause(ProviderHelper helper) {
+        List<String> sql = new ArrayList<>();
+        sql.add("<where>");
+        sql.add("<foreach collection='oredCriteria' item='criteria' separator='or'>");
         sql.add("<if test='criteria.valid'>");
         sql.add("<trim prefix='(' prefixOverrides='and' suffix=')'>");
         sql.add("<foreach collection='criteria.criteria' item='criterion'>");
