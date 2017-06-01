@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<my>
+	<any id="xmlMapperMerger" class="cn.howso.framework.mybatis.util.XMLMapperMergerImpl"></any>
+</my>

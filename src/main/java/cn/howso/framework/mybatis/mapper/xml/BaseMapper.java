@@ -1,4 +1,4 @@
-package cn.howso.framework.mybatis.mapper;
+package cn.howso.framework.mybatis.mapper.xml;
 
 /**
  * 通用mapper接口，子接口只要继承该接口并添加一个说明表名的注解，

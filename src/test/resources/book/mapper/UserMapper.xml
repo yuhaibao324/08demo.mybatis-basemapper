@@ -6,7 +6,8 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="label_id" jdbcType="INTEGER" property="labelId" />
   </resultMap>
- <!--  <select id="selectByMine" resultType="integer">
-  	select count(*) from sys_user
-  </select> -->
+ <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+	select * from sys_user where id=6; 	
+ </select>
+  
 </mapper>

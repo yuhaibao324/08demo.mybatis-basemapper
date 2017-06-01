@@ -2,8 +2,6 @@ package book;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.ibatis.builder.xml.XMLConfigBuilder;
 import org.apache.ibatis.io.Resources;
@@ -12,7 +10,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
 
-import cn.howso.framework.mybatis.pagination.LimitPage;
 import experiment.mapper.UserMapper;
 import experiment.model.User;
 import experiment.model.UserExample;
@@ -36,7 +33,6 @@ public class MyApp{
 		user.setId(-4);
 		recordList.add(user);*/
         //userMapper.batchInsertSelective(recordList);
-        
         UserExample example = new UserExample();
         example.createCriteria().andNameLike("ma%").andIdEqualTo(-4);
         //userMapper.batchInsert(recordList);
